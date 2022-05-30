@@ -15,4 +15,5 @@
 - Swift
 - UIKit
 - Storyboards
+- Alamofire
 - MVVM
