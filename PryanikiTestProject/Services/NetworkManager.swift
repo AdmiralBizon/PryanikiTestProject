@@ -28,20 +28,4 @@ final class NetworkManager {
             }
     }
     
-    func fetchImage(from url: String?, with completionHandler: @escaping (Data) -> Void) {
-      
-        guard let imageURL = url else { return }
-        
-        AF.request(imageURL)
-            .validate()
-            .responseData { response in
-                switch response.result {
-                case .success(let imageData):
-                    completionHandler(imageData)
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
-            }
-    }
-    
 }

@@ -6,20 +6,28 @@
 //
 
 import UIKit
+import Kingfisher
 
 class ImageTableViewCell: UITableViewCell {
     
     @IBOutlet weak var itemImage: UIImageView!
     @IBOutlet weak var itemText: UILabel!
     
+    private var downloadTask: DownloadTask?
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        itemImage.image = nil
+        itemImage.kf.cancelDownloadTask()
+    }
+    
     func configureCell(for element: ElementData) {
         
         itemText.text = element.text
         
-        NetworkManager.shared.fetchImage(from: element.url) { imageData in
-            DispatchQueue.main.async {
-                self.itemImage.image = UIImage(data: imageData)
-            }
+        if let urlString = element.url, let imageURL = URL(string: urlString) {
+            itemImage.kf.setImage(with: imageURL)
         }
     }
 }

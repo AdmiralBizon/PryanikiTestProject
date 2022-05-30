@@ -7,5 +7,6 @@ target 'PryanikiTestProject' do
   # Pods for PryanikiTestProject
   
   pod 'Alamofire'
+  pod 'Kingfisher'
 
 end

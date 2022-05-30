@@ -11,7 +11,7 @@ class MainViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     
-    private var viewModel: RulesListViewModel!
+    private var viewModel = RulesListViewModel()
     private var items = [Element]()
     
     override func viewDidLoad() {
@@ -20,8 +20,7 @@ class MainViewController: UIViewController {
     }
 
     func callViewModelForUIUpdate() {
-        self.viewModel = RulesListViewModel()
-        self.viewModel.bindRulesListViewModelToController = {
+        viewModel.bindRulesListViewModelToController = {
             self.updateUI()
         }
     }
@@ -38,7 +37,7 @@ class MainViewController: UIViewController {
        
         let action = UIAlertAction(title: "OK", style: .default)
         alert.addAction(action)
-        self.present(alert, animated: true)
+        present(alert, animated: true)
     }
 
 }
