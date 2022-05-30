@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Alamofire
 
 final class NetworkManager {
     
@@ -13,53 +14,34 @@ final class NetworkManager {
     
     private init() {}
     
-    func fetchData(from urlString: String, with completionHandler: @escaping (RulesList) -> Void) {
+    func fetchData(from url: String, with completionHandler: @escaping (RulesList) -> Void) {
         
-        guard let url = URL(string: urlString) else {
-            print("Invalid URL")
-            return
-        }
-        
-        URLSession.shared.dataTask(with: url) { data, _, error in
-            
-            if let error = error {
-                print(error.localizedDescription)
-                return
+        AF.request(url)
+            .validate()
+            .responseDecodable(of: RulesList.self) { response in
+                switch response.result {
+                case .success(let receivedData):
+                    completionHandler(receivedData)
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
             }
-            
-            guard let data = data else {
-                print("Invalid data")
-                return
-            }
-            
-            do {
-                let decodedData = try JSONDecoder().decode(RulesList.self, from: data)
-                completionHandler(decodedData)
-            } catch {
-                print(error.localizedDescription)
-            }
-            
-        }.resume()
-        
     }
     
     func fetchImage(from url: String?, with completionHandler: @escaping (Data) -> Void) {
-        guard let stringURL = url else { return }
-        guard let imageURL = URL(string: stringURL) else { return }
+      
+        guard let imageURL = url else { return }
         
-        URLSession.shared.dataTask(with: imageURL) { data, _, error in
-            
-            if let error = error {
-                print(error.localizedDescription)
-                return
+        AF.request(imageURL)
+            .validate()
+            .responseData { response in
+                switch response.result {
+                case .success(let imageData):
+                    completionHandler(imageData)
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
             }
-            
-            if let imageData = data {
-                completionHandler(imageData)
-            }
-            
-        }.resume()
-        
     }
     
 }
