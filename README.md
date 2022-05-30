@@ -16,4 +16,5 @@
 - UIKit
 - Storyboards
 - Alamofire
+- Kingfisher
 - MVVM
