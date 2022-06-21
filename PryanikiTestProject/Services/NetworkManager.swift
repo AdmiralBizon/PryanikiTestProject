@@ -14,17 +14,12 @@ final class NetworkManager {
     
     private init() {}
     
-    func fetchData(from url: String, with completionHandler: @escaping (RulesList) -> Void) {
+    func fetchData(from url: String, with completionHandler: @escaping (Result<RulesList, AFError>) -> Void) {
         
         AF.request(url)
             .validate()
             .responseDecodable(of: RulesList.self) { response in
-                switch response.result {
-                case .success(let receivedData):
-                    completionHandler(receivedData)
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
+                completionHandler(response.result)
             }
     }
     

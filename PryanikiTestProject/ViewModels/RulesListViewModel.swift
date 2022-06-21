@@ -15,23 +15,27 @@ class RulesListViewModel: NSObject {
         }
     }
     
+    var errorDescription: String?
     var bindRulesListViewModelToController : (() -> ()) = {}
     
     override init() {
         super.init()
         fetchData()
     }
-
+    
     func fetchData() {
-        NetworkManager.shared.fetchData(from: K.rulesListAPI) { [weak self] receivedData in
-            
-            let allElements = receivedData.view.compactMap { elementType in
-                receivedData.data.first { $0.name == elementType }
+        NetworkManager.shared.fetchData(from: K.rulesListAPI) { [weak self] response in
+            switch response {
+            case .success(let receivedData):
+                let allElements = receivedData.view.compactMap { elementType in
+                    receivedData.data.first { $0.name == elementType }
+                }
+                self?.data = allElements
+                self?.errorDescription = nil
+            case .failure(let error):
+                self?.errorDescription = error.localizedDescription
+                self?.bindRulesListViewModelToController()
             }
-            
-            self?.data = allElements
-            
         }
     }
-    
 }

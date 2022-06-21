@@ -11,15 +11,32 @@ class MainViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     
-    private var viewModel = RulesListViewModel()
+    private var viewModel: RulesListViewModel!
     private var items = [Element]()
+    private var isRefreshing = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupRefreshControl()
         callViewModelForUIUpdate()
     }
 
+    func setupRefreshControl() {
+        tableView.refreshControl = UIRefreshControl()
+        tableView.refreshControl?.addTarget(self,
+                                            action: #selector(didPullToRefresh),
+                                            for: .valueChanged)
+    }
+    
+    @objc private func didPullToRefresh() {
+        if !isRefreshing {
+            isRefreshing = true
+            callViewModelForUIUpdate()
+        }
+    }
+    
     func callViewModelForUIUpdate() {
+        viewModel = RulesListViewModel()
         viewModel.bindRulesListViewModelToController = {
             self.updateUI()
         }
@@ -27,8 +44,18 @@ class MainViewController: UIViewController {
     
     func updateUI() {
         DispatchQueue.main.async {
-            self.items = self.viewModel.data
-            self.tableView.reloadData()
+            if self.isRefreshing {
+                self.isRefreshing = false
+                self.tableView.refreshControl?.endRefreshing()
+            }
+            
+            if self.viewModel.errorDescription == nil {
+                self.items = self.viewModel.data
+                self.tableView.reloadData()
+            } else {
+                self.showAlert(message: self.viewModel.errorDescription ?? "Что-то пошло не так. Повторите попытку позже!")
+            }
+            
         }
     }
     
