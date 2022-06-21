@@ -8,7 +8,7 @@
 
 ## Preview
 
-![Simulator Screen Recording - iPhone 13 - 2022-05-29 at 23 34 12](https://user-images.githubusercontent.com/72994567/170891106-82fff12e-101d-41ef-8536-62ce69dfe630.gif)
+![Simulator Screen Recording - iPhone 13 - 2022-06-21 at 23 02 43](https://user-images.githubusercontent.com/72994567/174888311-200904b2-66e9-4b60-ab34-9058f5b0ac64.gif) ![Simulator Screen Recording - iPhone 13 - 2022-06-21 at 22 56 24](https://user-images.githubusercontent.com/72994567/174888378-3e576ff1-eecb-4d6a-8ca7-6c47265b0568.gif)
 
 ## Stack
 
